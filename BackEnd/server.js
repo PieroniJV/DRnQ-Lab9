@@ -34,33 +34,39 @@ const bookSchema = new mongoose.Schema({
   author: String
 });
 
-const bookModel = mongoose.model('Bookssss', bookSchema);
+const bookModel = mongoose.model('Books', bookSchema);
 
-app.post('/api/books',(req,res)=>{
+app.post('/api/books', (req, res) => {
   console.log(req.body);
 
   bookModel.create({
     title: req.body.title,
-    cover:req.body.cover,
-    author:req.body.author
+    cover: req.body.cover,
+    author: req.body.author
   })
-  
+
   res.send('Data Recieved');
 })
 
 app.get('/api/books', (req, res) => {
-  bookModel.find((error, data)=>{
+  bookModel.find((error, data) => {
     res.json(data);
   })
 })
 
-app.get('/api/book/:id', (req, res)=>{
+app.get('/api/book/:id', (req, res) => {
   console.log(req.params.id);
-  bookModel.findById(req.params.id,(error,data)=>{
+  bookModel.findById(req.params.id, (error, data) => {
     res.json(data);
   })
 })
 
+app.put('/api/book/:id', (req, res) => {
+  console.log('Updated: ' + req.params.id)
+  bookModel.findByIdAndUpdate(req.params.id, req.body, { new: true }, (error, data) => {
+    res.send(data);
+  })
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
